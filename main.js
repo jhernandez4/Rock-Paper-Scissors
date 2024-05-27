@@ -1,5 +1,3 @@
-// const gestureList = ["rock", "paper", "scissor"];
-
 function getComputerChoice(){
     let randomChoice = Math.floor((Math.random()*3)) + 1;
     let gestureString;
@@ -9,7 +7,7 @@ function getComputerChoice(){
         case 2:
             gestureString = "paper"; break;
         case 3:
-            gestureString = "scissor"; break;
+            gestureString = "scissors"; break;
         default:
             gestureString = "Error: Invalid value. Value should be from 1-3";
         
@@ -33,7 +31,7 @@ function playRound(humanChoice, computerChoice){
             winEvent('Rock beats scissors.');
         }
         else {
-            lossEvent('Paper beats rock');
+            lossEvent('Paper beats rock.');
         }
     }
     else if (humanChoice == 'paper'){
@@ -41,45 +39,58 @@ function playRound(humanChoice, computerChoice){
             winEvent('Paper beats rock.');
         }
         else {
-            lossEvent('Scissors beats paper');
+            lossEvent('Scissors beats paper.');
         }
     }
     else if(humanChoice == 'scissors'){
         if (computerChoice == 'paper'){
-            winEvent("Scissors beats paper");
+            winEvent("Scissors beats paper.");
         }
         else {
-            lossEvent('Rock beats scissors')
+            lossEvent('Rock beats scissors.')
         }
     }
 }
 function tieEvent(gestureString){
     let resultText = "Tie! No one wins. You both chose " + gestureString + ". ";
-    resultText += getCurrentScore();
-    resultDiv.textContent = resultText;
+    let currentScoreText = getCurrentScore();
+    let finalScoreText = "";
+
+    editDivText(resultText, currentScoreText, finalScoreText);
 }
 function winEvent(winReason){
     humanScore++;
-    let resultText = "You win! " + winReason +  "\n" + getCurrentScore() + "\n";
-    resultText += checkWinCondition();    
-    resultDiv.textContent = resultText; 
+    let resultText = "You win! " + winReason;
+    let currentScoreText = getCurrentScore();
+    let finalScoreText = checkWinCondition();
+
+    editDivText(resultText, currentScoreText, finalScoreText);
+
 }
 
 function lossEvent(lossReason){
     computerScore++; 
-    let resultText = "You lose! " + lossReason + "\n" + getCurrentScore() + "\n";
-    resultText += checkWinCondition();    
-    resultDiv.textContent = resultText;
+    let resultText = "You lose! " + lossReason;
+    let currentScoreText = getCurrentScore(); 
+    let finalScoreText = checkWinCondition();
+
+    editDivText(resultText, currentScoreText, finalScoreText);
 }
 
 function getCurrentScore(){
-    return `Your Score: ${humanScore}\nComputer Score: ${computerScore}`;
+    return `Your Score: ${humanScore}<br></br>Computer Score: ${computerScore}`;
+}
+
+function editDivText(resultText, currentScoreText, finalScoreText){
+    resultDiv.textContent = resultText;
+    currentScoreDiv.innerHTML = currentScoreText;
+    finalScoreDiv.innerHTML = finalScoreText;
 }
 
 function checkWinCondition(){
     let resultString = "";    
     if (humanScore == 5 || computerScore == 5){
-        resultString = `==== Scores ====\nUser: ${humanScore}\nComputer: ${computerScore}\n`;
+        resultString = `==== Final Score ====<br></br>User: ${humanScore}<br></br>Computer: ${computerScore}<br></br>`;
 
         let winDiff;
         if (humanScore == computerScore){
@@ -93,6 +104,10 @@ function checkWinCondition(){
             winDiff = computerScore - humanScore;
             resultString += `You lost this game by ${winDiff} points!`;
         }
+        
+        resultString += "<br></br>Resetting scores..."
+        humanScore = 0;
+        computerScore = 0;
     }
 
     return resultString;
@@ -107,33 +122,37 @@ paperButton.textContent = "Paper";
 scissorsButton.textContent = "Scissors";
 
 const resultDiv = document.createElement("div");
+const currentScoreDiv = document.createElement("div");
+const finalScoreDiv = document.createElement("div"); 
 
 rockButton.addEventListener("click", () => {
-    const gesture = "rock";
+    const humanChoice = "rock";
     const computerChoice = getComputerChoice();
 
-    playRound(gesture, computerChoice);
+    playRound(humanChoice, computerChoice);
 
 });
 
 paperButton.addEventListener("click", () => {
-    const gesture = "paper";
+    const humanChoice = "paper";
     const computerChoice = getComputerChoice();
 
-    playRound(gesture, computerChoice);
+    playRound(humanChoice, computerChoice);
 });
 
 scissorsButton.addEventListener("click", () => {
-    const gesture = "scissors";
+    const humanChoice = "scissors";
     const computerChoice = getComputerChoice();
 
-    playRound(gesture, computerChoice);
+    playRound(humanChoice, computerChoice);
 });
 
 document.body.appendChild(rockButton);
 document.body.appendChild(paperButton);
 document.body.appendChild(scissorsButton);
 document.body.appendChild(resultDiv);
+document.body.appendChild(currentScoreDiv);
+document.body.appendChild(finalScoreDiv);
 
 let humanScore = 0;
 let computerScore = 0;
