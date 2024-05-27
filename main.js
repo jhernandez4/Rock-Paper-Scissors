@@ -26,13 +26,13 @@ function getHumanChoice(){
 function playRound(humanChoice, computerChoice){
     humanChoice = humanChoice.toLowerCase();
     if (humanChoice == computerChoice){
-        console.log('Tie! No one wins.')
+        tieEvent(humanChoice);
     }
     else if (humanChoice == 'rock'){
         if (computerChoice == 'scissors'){
             winEvent('Rock beats scissors.');
         }
-        else{
+        else {
             lossEvent('Paper beats rock');
         }
     }
@@ -40,7 +40,7 @@ function playRound(humanChoice, computerChoice){
         if (computerChoice == 'rock'){
             winEvent('Paper beats rock.');
         }
-        else{
+        else {
             lossEvent('Scissors beats paper');
         }
     }
@@ -48,44 +48,65 @@ function playRound(humanChoice, computerChoice){
         if (computerChoice == 'paper'){
             winEvent("Scissors beats paper");
         }
-        else{
+        else {
             lossEvent('Rock beats scissors')
         }
     }
 }
-
+function tieEvent(gestureString){
+    let resultText = "Tie! No one wins. You both chose " + gestureString + ". ";
+    resultText += getCurrentScore();
+    resultDiv.textContent = resultText;
+}
 function winEvent(winReason){
-    console.log('You win! ' + winReason);
     humanScore++;
+    let resultText = "You win! " + winReason +  "\n" + getCurrentScore() + "\n";
+    resultText += checkWinCondition();    
+    resultDiv.textContent = resultText; 
 }
 
 function lossEvent(lossReason){
-    console.log('You lose! '+ lossReason);
-    computerScore++;
+    computerScore++; 
+    let resultText = "You lose! " + lossReason + "\n" + getCurrentScore() + "\n";
+    resultText += checkWinCondition();    
+    resultDiv.textContent = resultText;
 }
 
-function playGame(){
-    console.log(`==== Scores ====\nUser: ${humanScore}\nComputer: ${computerScore}\n`);
-    
-    let winDiff;
-    if (humanScore == computerScore){
-        console.log("Tie! No one wins this game");
+function getCurrentScore(){
+    return `Your Score: ${humanScore}\nComputer Score: ${computerScore}`;
+}
+
+function checkWinCondition(){
+    let resultString = "";    
+    if (humanScore == 5 || computerScore == 5){
+        resultString = `==== Scores ====\nUser: ${humanScore}\nComputer: ${computerScore}\n`;
+
+        let winDiff;
+        if (humanScore == computerScore){
+            resultString += "Tie! No one wins this game";
+        }
+        else if (humanScore > computerScore){
+            winDiff = humanScore - computerScore;
+            resultString += `You win this game by ${winDiff} points!`;
+        }
+        else{
+            winDiff = computerScore - humanScore;
+            resultString += `You lost this game by ${winDiff} points!`;
+        }
     }
-    else if (humanScore > computerScore){
-        winDiff = humanScore - computerScore;
-        console.log(`You win this game by ${winDiff} points!`);
-    }
-    else{
-        winDiff = computerScore - humanScore;
-        console.log(`You lost this game by ${winDiff} points!`);
-    }
+
+    return resultString;
 }
 
 const rockButton = document.createElement("button");
 const paperButton = document.createElement("button");
 const scissorsButton = document.createElement("button");
 
-const resultsDiv = document.createElement("div");
+rockButton.textContent = "Rock";
+paperButton.textContent = "Paper";
+scissorsButton.textContent = "Scissors";
+
+const resultDiv = document.createElement("div");
 
 rockButton.addEventListener("click", () => {
     const gesture = "rock";
@@ -109,10 +130,10 @@ scissorsButton.addEventListener("click", () => {
     playRound(gesture, computerChoice);
 });
 
-
+document.body.appendChild(rockButton);
+document.body.appendChild(paperButton);
+document.body.appendChild(scissorsButton);
+document.body.appendChild(resultDiv);
 
 let humanScore = 0;
 let computerScore = 0;
-
-
-playGame();
