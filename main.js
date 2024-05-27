@@ -1,3 +1,5 @@
+// const gestureList = ["rock", "paper", "scissor"];
+
 function getComputerChoice(){
     let randomChoice = Math.floor((Math.random()*3)) + 1;
     let gestureString;
@@ -25,10 +27,8 @@ function playRound(humanChoice, computerChoice){
     humanChoice = humanChoice.toLowerCase();
     if (humanChoice == computerChoice){
         console.log('Tie! No one wins.')
-        return;
     }
-
-    if (humanChoice == 'rock'){
+    else if (humanChoice == 'rock'){
         if (computerChoice == 'scissors'){
             winEvent('Rock beats scissors.');
         }
@@ -65,11 +65,6 @@ function lossEvent(lossReason){
 }
 
 function playGame(){
-    for(let i = 0; i < 5; i++){
-        let humanChoice = getHumanChoice();
-        let computerChoice = getComputerChoice();
-        playRound(humanChoice, computerChoice);
-    }
     console.log(`==== Scores ====\nUser: ${humanScore}\nComputer: ${computerScore}\n`);
     
     let winDiff;
@@ -85,6 +80,36 @@ function playGame(){
         console.log(`You lost this game by ${winDiff} points!`);
     }
 }
+
+const rockButton = document.createElement("button");
+const paperButton = document.createElement("button");
+const scissorsButton = document.createElement("button");
+
+const resultsDiv = document.createElement("div");
+
+rockButton.addEventListener("click", () => {
+    const gesture = "rock";
+    const computerChoice = getComputerChoice();
+
+    playRound(gesture, computerChoice);
+
+});
+
+paperButton.addEventListener("click", () => {
+    const gesture = "paper";
+    const computerChoice = getComputerChoice();
+
+    playRound(gesture, computerChoice);
+});
+
+scissorsButton.addEventListener("click", () => {
+    const gesture = "scissors";
+    const computerChoice = getComputerChoice();
+
+    playRound(gesture, computerChoice);
+});
+
+
 
 let humanScore = 0;
 let computerScore = 0;
